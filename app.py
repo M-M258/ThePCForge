@@ -68,7 +68,7 @@ def filter_results_with_gpt(google_results, user_query):
 
     # Call GPT API
     response = openai.ChatCompletion.create(
-        model="gpt-4-turbo",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are an expert PC-building assistant."},
             {"role": "user", "content": prompt},
@@ -92,7 +92,7 @@ def generate_pc_build(filtered_requirements, user_query):
 
     # Call GPT API
     response = openai.ChatCompletion.create(
-        model="gpt-4-turbo",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "You are a PC-building expert assistant."},
             {"role": "user", "content": prompt},
