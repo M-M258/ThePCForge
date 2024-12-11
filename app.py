@@ -11,21 +11,25 @@ app = Flask(__name__)
 openai.api_key = os.getenv("OPENAI_API_KEY")
 SERPAPI_KEY = os.getenv("SERPAPI_API_KEY")
 
-# Specific websites to focus searches on
-TARGET_WEBSITES = [
-    "pcpartpicker.com",
-    "tomshardware.com",
-    "videocardbenchmark.net",
-    "cpubenchmark.net"
-]
+# Pages to scrape for components
+SCRAPING_PAGES = {
+    "cpu": "https://pcpartpicker.com/products/cpu/",
+    "cpu-cooler": "https://pcpartpicker.com/products/cpu-cooler/",
+    "motherboard": "https://pcpartpicker.com/products/motherboard/",
+    "memory": "https://pcpartpicker.com/products/memory/",
+    "internal-hard-drive": "https://pcpartpicker.com/products/internal-hard-drive/",
+    "video-card": "https://pcpartpicker.com/products/video-card/",
+    "power-supply": "https://pcpartpicker.com/products/power-supply/",
+    "case": "https://pcpartpicker.com/products/case/"
+}
 
 def search_with_serpapi(query):
     """
-    Use SerpAPI to search for results focused on specific websites.
+    Use SerpAPI to search for results based on GPT-identified requirements.
     """
     results = []
-    for site in TARGET_WEBSITES:
-        # Append site-specific query
+    for category, site in SCRAPING_PAGES.items():
+        # Append category-specific query
         formatted_query = f"{query} site:{site}"
         params = {
             "q": formatted_query,
@@ -33,6 +37,8 @@ def search_with_serpapi(query):
             "api_key": SERPAPI_KEY,
         }
         response = requests.get("https://serpapi.com/search", params=params)
+        if response.status_code != 200:
+            continue
         data = response.json()
 
         # Extract top organic results
@@ -40,7 +46,7 @@ def search_with_serpapi(query):
             title = result.get("title", "No title available")
             snippet = result.get("snippet", "No snippet available")
             link = result.get("link", "No link available")
-            results.append({"title": title, "snippet": snippet, "link": link})
+            results.append({"category": category, "title": title, "snippet": snippet, "link": link})
 
     return results
 
@@ -50,7 +56,7 @@ def filter_results_with_gpt(google_results, user_query):
     """
     # Format the search results for GPT
     formatted_results = "\n".join(
-        [f"Title: {result['title']}\nSnippet: {result['snippet']}\nLink: {result['link']}" for result in google_results]
+        [f"Category: {result['category']}\nTitle: {result['title']}\nSnippet: {result['snippet']}\nLink: {result['link']}" for result in google_results]
     )
 
     # GPT Prompt
@@ -62,7 +68,7 @@ def filter_results_with_gpt(google_results, user_query):
 
     # Call GPT API
     response = openai.ChatCompletion.create(
-        model="gpt-4o-mini",
+        model="gpt-4-turbo",
         messages=[
             {"role": "system", "content": "You are an expert PC-building assistant."},
             {"role": "user", "content": prompt},
@@ -86,7 +92,7 @@ def generate_pc_build(filtered_requirements, user_query):
 
     # Call GPT API
     response = openai.ChatCompletion.create(
-        model="gpt-4o",
+        model="gpt-4-turbo",
         messages=[
             {"role": "system", "content": "You are a PC-building expert assistant."},
             {"role": "user", "content": prompt},
@@ -105,11 +111,30 @@ def build_pc_api():
 
 def call_flask_app(data):
     user_query = data.get('query', '')
-    
-    google_results = search_with_serpapi(user_query)
+
+    # Step 1: Use GPT to determine requirements based on the user query
+    requirements_prompt = (
+        f"The user wants to build a PC based on the following input: '{user_query}'.\n"
+        "Extract the key component requirements (e.g., high-end GPU, mid-range CPU, etc.) needed for the PC."
+    )
+    gpt_response = openai.ChatCompletion.create(
+        model="gpt-4-turbo",
+        messages=[
+            {"role": "system", "content": "You are a PC component requirements extraction assistant."},
+            {"role": "user", "content": requirements_prompt},
+        ]
+    )
+    extracted_requirements = gpt_response["choices"][0]["message"]["content"].strip()
+
+    # Step 2: Search for components matching the requirements
+    google_results = search_with_serpapi(extracted_requirements)
+
+    # Step 3: Filter results using GPT
     filtered_requirements = filter_results_with_gpt(google_results, user_query)
+
+    # Step 4: Generate the PC build
     pc_build = generate_pc_build(filtered_requirements, user_query)
-    
+
     return {"pc_build": pc_build}
 
 if __name__ == '__main__':
