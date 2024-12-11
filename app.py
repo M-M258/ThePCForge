@@ -86,7 +86,7 @@ def generate_pc_build(filtered_requirements, user_query):
 
     # Call GPT API
     response = openai.ChatCompletion.create(
-        model="gpt-4-0",
+        model="gpt-4o",
         messages=[
             {"role": "system", "content": "You are a PC-building expert assistant."},
             {"role": "user", "content": prompt},
