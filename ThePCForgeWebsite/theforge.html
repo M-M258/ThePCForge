@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ThePCForge - The Forge</title>
+  <!-- Same external CSS file (style.css) -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navigation Bar (same as other pages) -->
+  <header class="nav-header">
+    <div class="nav-logo">
+      <h1 class="site-title">ThePCForge</h1>
+    </div>
+    <nav class="nav-menu">
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="theforge.html">The Forge</a></li>
+        <li><a href="about.html">About Us</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero / Banner Section for The Forge -->
+  <section class="hero-section forge-hero">
+    <div class="hero-content">
+      <h2 class="hero-title">The Forge</h2>
+      <p class="hero-subtitle">Your PC Building Companion</p>
+    </div>
+    <div class="hero-image">
+      <!-- Replace this with your actual Forge logo or the same ThePCForge logo -->
+      <img src="Img/ThePCForgeLogo.png" alt="ThePCForge Logo" />
+    </div>
+  </section>
+
+  <!-- Forge Content Section -->
+  <section class="forge-content-section">
+    <h2 class="forge-heading">Input your query and receive your assisted output.</h2>
+    
+    <div class="forge-boxes-container">
+      <!-- Left Box: Chat / GPT Interface -->
+      <div class="forge-chat-box">
+        <div id="chat-output" class="chat-output-area">
+          <p class="chat-message">
+            Ask a question, from the best possible PC components for your specific use case
+            to simply asking to design a system based on your budget. Ensure you ask only about PC/Computer builds, and a specific budget!
+          </p>
+        </div>
+
+        <div class="chat-input-area">
+          <p>Please enter your question</p>
+          <input id="user-input" type="text" placeholder="(What is the best gaming and production PC you can build for $3000?)" />
+          <button id="send-button">Send</button>
+        </div>
+      </div>
+
+      <!-- Right Box: Parts List (Grid or Table) -->
+      <div class="forge-partslist-box">
+        <h3>Your List</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Model</th>
+              <th>Price (GBP)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Row 1: Processor -->
+            <tr>
+              <td>Processor (CPU)</td>
+              <td><input type="text" id="model-cpu" /></td>
+              <td><input type="text" id="price-cpu" /></td>
+            </tr>
+
+            <!-- Row 2: Graphics Card -->
+            <tr>
+              <td>Graphics Card (GPU)</td>
+              <td><input type="text" id="model-gpu" /></td>
+              <td><input type="text" id="price-gpu" /></td>
+            </tr>
+
+            <!-- Row 3: Motherboard -->
+            <tr>
+              <td>Motherboard</td>
+              <td><input type="text" id="model-motherboard" /></td>
+              <td><input type="text" id="price-motherboard" /></td>
+            </tr>
+
+            <!-- Row 4: Memory (RAM) -->
+            <tr>
+              <td>Memory (RAM)</td>
+              <td><input type="text" id="model-ram" /></td>
+              <td><input type="text" id="price-ram" /></td>
+            </tr>
+
+            <!-- Row 5: Storage -->
+            <tr>
+              <td>Storage</td>
+              <td><input type="text" id="model-storage" /></td>
+              <td><input type="text" id="price-storage" /></td>
+            </tr>
+
+            <!-- Row 6: Power Supply (PSU) -->
+            <tr>
+              <td>Power Supply (PSU)</td>
+              <td><input type="text" id="model-psu" /></td>
+              <td><input type="text" id="price-psu" /></td>
+            </tr>
+
+            <!-- Row 7: Case -->
+            <tr>
+              <td>Case</td>
+              <td><input type="text" id="model-case" /></td>
+              <td><input type="text" id="price-case" /></td>
+            </tr>
+
+            <!-- Row 8: Cooling -->
+            <tr>
+              <td>Cooling</td>
+              <td><input type="text" id="model-cooling" /></td>
+              <td><input type="text" id="price-cooling" /></td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Feedback button under the parts list -->
+        <div class="feedback-link-container">
+          <a
+           href="https://docs.google.com/forms/d/e/1FAIpQLSeJ0IQyLrBXwTR8x4Bs2Qbjcn5i7YOY14-IA5wZDC3YDcuF1A/viewform?usp=sharing"
+           target="_blank"
+           class="feedback-button"
+          >
+           Provide Feedback for ThePCForge Here!
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+ <!-- FAQ Section -->
+<section class="faq-section">
+  <h2>FAQ</h2>
+  <details class="faq-item">
+    <summary>What is ThePCForge?</summary>
+    <p>
+      It’s an AI‐powered PC building assistant that tailors computer builds to your unique budget and requirements.  
+      Behind the scenes, it collects hardware data from external sources and uses advanced AI to compare and recommend components.  
+      This means less manual research for you, since ThePCForge handles the heavy lifting of finding current parts and prices.
+    </p>
+  </details>
+  <details class="faq-item">
+    <summary>How does the PC build recommendation work?</summary>
+    <p>
+      You enter a query (for example, “I want a gaming PC under £1,000”).  
+      The system uses GPT to generate refined search questions, ensuring that the subsequent data pulled is both relevant and accurate.  
+      It then uses SerpAPI to search external websites for the latest hardware information, including current prices and part availability.  
+      Next, GPT filters and interprets this data, producing a concise list of recommended components, such as the CPU, GPU, and Motherboard.  
+      Finally, the parts list on the right-hand side is updated so you can easily review each recommended item at a glance.
+    </p>
+  </details>
+  <details class="faq-item">
+    <summary>Can I modify the recommended build?</summary>
+    <p>
+      Yes. The recommendations are a flexible starting point.  
+      You can adjust your query to refine specific components or change the overall budget.  
+      Each new query triggers the system to re‐fetch data and update the recommendations.  
+      This loop continues until you’re satisfied with the parts list that meets your exact preferences.
+    </p>
+  </details>
+  <details class="faq-item">
+    <summary>How often is the hardware information updated?</summary>
+    <p>
+      The system always pulls the latest data from external, trusted sources to ensure that prices and part availability are as current as possible.  
+      This frequent update process helps maintain accuracy in the recommendations you receive, giving you reliable and up-to-date information.
+    </p>
+  </details>
+  <details class="faq-item">
+    <summary>How accurate are the recommendations?</summary>
+    <p>
+      The system combines refined search queries generated by GPT with real-time data from external sources, resulting in reliable component suggestions.  
+      While every effort is made to ensure accuracy, as it still is an Ai-trained application, errors and mistakes can still be made. 
+      We recommend verifying prices and compatibility before finalizing your build to ensure the best outcome. 
+    </p>
+  </details>
+</section>
+
+
+  <!-- Footer (same as other pages) -->
+  <footer class="site-footer">
+    <div class="footer-left">
+      
+      <p class="footer-site-name">ThePCForge</p>
+      <p class="footer-copyright">
+        © 2024 ThePCForge
+      </p>
+    </div>
+    <div class="footer-right">
+      <div class="footer-column">
+        <h4>Product</h4>
+        <a href="#">Overview</a>
+      </div>
+      <div class="footer-column">
+        <h4>Company</h4>
+        <a href="#">About</a>
+      </div>
+      <div class="footer-column">
+        <h4>Support</h4>
+        <a href="#">FAQs</a>
+      </div>
+      <div class="footer-column">
+        <h4>Legal</h4>
+        <a href="#">Terms</a>
+        <a href="#">Privacy</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Load external JavaScript for webtraffic and data parsing-->
+  <script src="theforge.js" defer></script>
+
+</body>
+</html>
